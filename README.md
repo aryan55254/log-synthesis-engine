@@ -1,4 +1,4 @@
-# Log Synthesis Engine
+# Scribe : Log Synthesis Engine For AI Agents
 
 A high-performance, agentic conversational log processing pipeline designed to ingest unstructured system log streams, compute dense vector embeddings, and run spatial density matrix clustering generating real-time product management (PM) insights before committing analytics to an OLAP data warehouse.
 
