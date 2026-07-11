@@ -40,17 +40,16 @@ services:
       - .env
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - CLICKHOUSE_URL=http://clickhouse_analytics:8123
+      - CLICKHOUSE_HOST=clickhouse_analytics
+      - CLICKHOUSE_PORT=8123
       - CLICKHOUSE_DB=${CLICKHOUSE_DB:-log_analytics_db}
       - CLICKHOUSE_USER=${CLICKHOUSE_USER:-aryan_analytics}
       - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-analytics_password_99}
+      - PYTHONUNBUFFERED=1
     ports:
       - "3000:3000"
-    # THE UNMISTAKABLE SHIELD CONFIGURATION:
     volumes:
-      - .:/app                  
-      - /app/node_modules       
-      - /app/dist               
+      - .:/app
     deploy:
       resources:
         limits:

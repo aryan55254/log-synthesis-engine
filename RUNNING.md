@@ -7,7 +7,7 @@ This document describes the commands to provision, initialize, verify, and fully
 ## Prerequisites
 
 - Docker & Docker Compose V2
-- Node.js LTS (v18+ or v20+)
+- Python 3.11+
 - A valid Gemini API token set in the repository root `.env`:
 
 ```env
@@ -55,29 +55,29 @@ docker compose ps
 docker compose logs -f engine
 ```
 
-3) Verification (TypeScript CLI in src/cli.ts)
+3) Verification (Python CLI in src/cli.py)
 
 - Step A — Check gateway health:
 
 ```bash
-npx ts-node src/cli.ts /health
+python -m src.cli /health
 ```
 
 - Step B — Ingest an operational log batch:
 
 ```bash
-npx ts-node src/cli.ts /input agent_run.log  
+python -m src.cli /input agent_run.log  
 ```
 - Or you can add your own log file in root of the engine :
 
 ```bash
-npx ts-node src/cli.ts /input your_log_file.log  
+python -m src.cli /input your_log_file.log  
 ```
 
 - Step C — Query analytics/dashboard:
 
 ```bash
-npx ts-node src/cli.ts /analytics
+python -m src.cli /analytics
 ```
 
 4) Full environment cleanup

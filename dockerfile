@@ -1,32 +1,28 @@
-# Stage 1: Build the source tree and compile TypeScript assets
-FROM node:20-slim AS builder
+# Stage 1: Build the source tree with Python dependencies
+FROM python:3.11-slim AS builder
 WORKDIR /app
 
 # Install build dependencies if any native compilation steps trigger down the wire
-COPY package*.json tsconfig.json ./
-RUN npm ci
-
-# Copy codebase assets and run the compiler sequence
-COPY . .
-RUN npm run build
+COPY requirements.txt ./
+RUN pip install --user --no-cache-dir -r requirements.txt
 
 # ---
 
 # Stage 2: Production execution environment
-FROM node:20-slim AS runner
+FROM python:3.11-slim AS runner
 WORKDIR /app
-ENV NODE_ENV=production
+ENV PYTHONUNBUFFERED=1
 
-# CRUCIAL: Copy package.json to the runtime context so Node resolves `"type": "module"` correctly
-COPY package*.json ./
+# Copy requirements for reference
+COPY requirements.txt ./
 
 # Install ONLY production dependencies to keep the image footprint ultra-lean
-RUN npm ci --only=production
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the compiled ECMAScript distribution layers from your builder stage
-COPY --from=builder /app/dist ./dist
+# Copy the application code
+COPY . .
 
 EXPOSE 3000
 
-# Execute your Fastify master thread daemon process
-CMD ["node", "dist/index.js"]
+# Execute your FastAPI daemon process
+CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "3000"]
